@@ -4,7 +4,7 @@ const url = require('url');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
+    width: 400,
     height: 600,
     // frame: false, // 无边框
     // transparent: true, // 背景透明
