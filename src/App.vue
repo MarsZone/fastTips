@@ -8,7 +8,7 @@
       <h3>书签</h3>
       <div class="bookmark-list">
         <div 
-          v-for="(note, index) in notes" 
+          v-for="(note, index) in sortedNotes" 
           :key="note.id" 
           class="bookmark-item"
           @click="scrollToNote(index)"
@@ -36,7 +36,7 @@
       <main class="main">
         <div class="notes-grid" ref="notesGrid">
           <div 
-            v-for="note in notes" 
+            v-for="note in sortedNotes" 
             :key="note.id" 
             class="note"
             :style="{ backgroundColor: note.color }"
@@ -84,17 +84,34 @@ export default {
       noteRefs: {}
     }
   },
+  computed: {
+    sortedNotes() {
+      // 按时间倒序排序便签
+      return [...this.notes].sort((a, b) => {
+        // 先尝试使用 timestamp 排序
+        if (a.timestamp && b.timestamp) {
+          return b.timestamp - a.timestamp;
+        }
+        // 如果没有 timestamp，则尝试将 date 字符串转换为日期对象进行排序
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+      });
+    }
+  },
   mounted() {
     this.loadNotes()
   },
   methods: {
     addNote() {
+      const now = new Date();
       const newNote = {
         id: Date.now(),
         title: '',
         content: '',
         color: '#ffeb3b',
-        date: new Date().toLocaleString()
+        date: now.toLocaleString(),
+        timestamp: now.getTime() // 添加时间戳用于准确排序
       }
       this.notes.push(newNote)
       this.saveNotes()
@@ -110,6 +127,12 @@ export default {
       const savedNotes = localStorage.getItem('fastTipsNotes')
       if (savedNotes) {
         this.notes = JSON.parse(savedNotes)
+        // 为旧便签添加 timestamp（如果没有的话）
+        this.notes.forEach(note => {
+          if (!note.timestamp) {
+            note.timestamp = new Date(note.date).getTime()
+          }
+        })
       }
     },
     toggleBookmarks() {
