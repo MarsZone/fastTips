@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "electron:dev": "concurrently -k \"npm run dev\" \"electron .\"",
-    "electron:build": "npm run build && electron-builder --win"
+    "electron:build": "npm run build && electron-builder"
   },
   "dependencies": {
     "vue": "^3.3.4"
@@ -31,16 +31,10 @@
       "dist/**/*"
     ],
     "win": {
-      "target": "nsis",
       "icon": "public/favicon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
     }
   },
   "config": {
-    "electronMirror": "https://npmmirror.com/mirrors/electron/",
-    "electronBuilderBinariesMirror": "https://npmmirror.com/mirrors/electron-builder-binaries/"
+    "electronMirror": "https://npmmirror.com/mirrors/electron/"
   }
 }
