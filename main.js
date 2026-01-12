@@ -6,12 +6,17 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    // frame: false, // 无边框
+    // transparent: true, // 背景透明
     webPreferences: {
       // preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false
     }
   });
+
+  // 隐藏菜单栏
+  Menu.setApplicationMenu(null);
 
   // 根据环境加载不同的内容
   if (process.env.NODE_ENV === 'development') {
